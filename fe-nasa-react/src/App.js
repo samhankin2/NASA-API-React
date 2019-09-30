@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./App.css";
+import Header from "./Components/Header";
+import Table from "./Components/Table";
+
+class App extends Component {
+  state = {
+    data: null
+  };
+  componentDidMount() {
+    axios
+      .get("https://data.nasa.gov/resource/gh4g-9sfh.json")
+      .then(({ data }) => {
+        this.setState({ data: data.slice(0, 25) });
+      });
+  }
+  render() {
+    return (
+      <div className="App">
+        <Header />
+        {this.state.data && <Table data={this.state.data} />}
+      </div>
+    );
+  }
 }
 
 export default App;
